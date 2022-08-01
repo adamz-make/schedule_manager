@@ -1,0 +1,14 @@
+body {
+    background-color: white;
+}
+
+.btn_common {
+    width:150px;
+    height: 30px;
+    border-radius: 5px;
+    margin-top: 30px;
+    margin-left: 200px;
+    background: #af0530;
+    color: #fff;
+    font-size: medium;
+}
