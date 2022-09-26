@@ -83,7 +83,7 @@ class Schedule implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
+            'date' => $this->date->format('Y-m-d h:i:s'),
             'company' => $this->company->jsonSerialize(),
             'description' => $this->description
         ];

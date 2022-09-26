@@ -13,4 +13,11 @@ interface ScheduleRepositoryInterface
      * @return array<Schedule>
      */
     public function getScheduleByCompanyAndDate(string $companyId, string $dateFrom, string $dateto ): array;
+
+    /**
+     * @param string $dateFrom
+     * @param string $dateto
+     * @return array
+     */
+    public function getSchedulesByDate(string $dateFrom, string $dateto): array;
 }

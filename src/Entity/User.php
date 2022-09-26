@@ -143,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->CompanyId;
     }
 
-    public function setCompanyId(int$Company): self
+    public function setCompanyId(int $Company): self
     {
         $this->CompanyId = $Company;
         return $this;

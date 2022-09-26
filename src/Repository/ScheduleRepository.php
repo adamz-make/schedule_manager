@@ -74,4 +74,26 @@ class ScheduleRepository extends ServiceEntityRepository implements ScheduleRepo
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param Schedule $schedule
+     * @return array<Schedule>
+     */
+    public function getSchedulesByDate(string $dateFrom, string $dateto): array
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.company','c')
+            ->andWhere('a.date >=:dateFrom')
+            ->andWhere('a.date <=:dateTo')
+            ->setParameters(['dateFrom' => $dateFrom, 'dateTo' => $dateto])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function persist(Schedule $schedule)
+    {
+        $em = $this->getEntityManager();
+        $em->persist($schedule);
+        $em->flush();
+    }
 }

@@ -16,13 +16,19 @@ class GetCompaniesJsonService
      * GetCompaniesJsonService constructor.
      * @param CompanyRepositoryInterface $companyRepository
      */
+
     public function __construct(CompanyRepositoryInterface $companyRepository)
     {
         $this->companyRepository = $companyRepository;
     }
+
+    /**
+     * @return array<Company>
+     */
     public function execute(): array
     {
-        $companies = $this->companyRepository->findAll();
+
+        return  $this->companyRepository->findAll();
         $outArray = [];
         /** @var Company $company */
         foreach ($companies as $company) {

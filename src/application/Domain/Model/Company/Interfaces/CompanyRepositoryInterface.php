@@ -1,17 +1,15 @@
 <?php
 
-
 namespace App\application\Domain\Model\Company\Interfaces;
 
+use App\application\Domain\CommonRepository\Interfaces\CommonRepositoryInterface;
+use App\Entity\Company;
 
-interface CompanyRepositoryInterface
+interface CompanyRepositoryInterface extends CommonRepositoryInterface
 {
     public function findAll();
-    /**
-     * @param $id
-     * @param null $lockMode
-     * @param null $lockVersion
-     * @return mixed
-     */
+
     public function find($id, $lockMode = null, $lockVersion = null);
+
+    public function findOneBy(array $criteria, array $orderBy = null);
 }

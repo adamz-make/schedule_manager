@@ -44,15 +44,20 @@
              </div>
         </div>
 
-        <!--
-        <div class="row">
-            <single-schedule v-if="scheduleForDays !== undefined && scheduleForDays !== null"
 
-                             v-for="(daydata, index, key) in scheduleForDays" :date="index" :data="JSON.parse(daydata)" :key="key"
+         <div class="row" v-on:click="testMethod">
+            <single-schedule  v-if="scheduleForDays !== undefined && scheduleForDays !== null"
+                             v-for="(dayData, index, key) in scheduleForDays"
+                              :date="index" :data="dayData" :key="key" :openNewDescription="test"
+                              @closeDescriptionData="showDescriptionData=false"
                              style="float:left">
             </single-schedule>
-        </div>!-->
+        </div>
+        <schedule-description
+            v-if="this.descriptionData !== undefined && this.descriptionData !== null && showDescriptionData"
+            :data="this.descriptionData">
 
+        </schedule-description>
         <add-schedule @closePopup="showAddScheduleModal=false" v-if="showAddScheduleModal" :company=companyId ></add-schedule>
     </div>
 </template>
@@ -61,12 +66,15 @@
 import singleSchedule from "./singleSchedule";
 import axios from "axios";
 import AddSchedule from "./addSchedule";
+import scheduleDescription from "./scheduleDescription";
+import {eventBus} from "../schedule";
 
 export default {
     name: "schedule",
     components: {
         AddSchedule,
         singleSchedule,
+        scheduleDescription
     },
     data() {
         return {
@@ -76,6 +84,9 @@ export default {
             selectedMonth: null,
             showAddScheduleModal: false,
             companyId: null,
+            test: false,
+            showDescriptionData: true,
+            descriptionData: null,
         }
     },
     created() {
@@ -83,8 +94,17 @@ export default {
         this.selectedYear = currentDay.getUTCFullYear();
         this.selectedMonth = currentDay.getUTCMonth() + 1;
     },
-
+    mounted() {
+        console.log(this.descriptionData);
+        eventBus.$on('descriptionData', (descriptionData) => {
+            this.showDescriptionData = true;
+            this.descriptionData = descriptionData;
+        })
+    },
     methods: {
+        testMethod() {
+            this.test = !this.test;
+        },
         getSchedule() {
             if ( this.companyId == null || this.companyId === undefined) {
                 return;
@@ -103,8 +123,7 @@ export default {
                 })
                 .then(response => {
                     let scheduleFordays = response.data.scheduleForDays;
-                    this.scheduleForDays = scheduleFordays;
-                    console.log(this.scheduleForDays);
+                    this.scheduleForDays = JSON.parse(scheduleFordays);
                 })
                 .catch(error => {
                     console.log(error);

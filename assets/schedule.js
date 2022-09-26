@@ -13,6 +13,8 @@ import './bootstrap';
 import Vue from 'vue';
 import schedule from "./Components/schedule";
 
+export const eventBus = new Vue({});
+
 new Vue ({
     render: h=>h(schedule)
 }).$mount('#schedule')

@@ -4,15 +4,19 @@ namespace App\Controller;
 
 use App\application\Services\CompanyServices\GetCompaniesJsonService;
 use App\application\Services\ScheduleList\AddScheduleService;
+use App\application\Services\ScheduleList\GetAvailableCompaniesService;
 use App\application\Services\ScheduleList\GetScheduleLIstService;
 use App\application\Services\ScheduleList\GetScheduleService;
-use App\Entity\Schedule;
-use App\Repository\CompanyRepository;
+use App\Repository\ScheduleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Twig\Environment;
 
 class ScheduleController extends AbstractController
 {
@@ -25,7 +29,7 @@ class ScheduleController extends AbstractController
         $jsonCompanies = $getCompaniesService->execute();
         return $this->render('schedule.html.twig',
             [
-                'companies' =>json_encode($jsonCompanies)
+                'companies' => json_encode($jsonCompanies)
             ]);
     }
     /**
@@ -38,10 +42,9 @@ class ScheduleController extends AbstractController
         $companyId = $postData->companyId;
         $dateImmuTable = new \DateTimeImmutable($date);
         $scheduleForDays = $getScheduleListService->execute($dateImmuTable, $companyId);
-
         $response = new StreamedResponse();
         $response->setCallback(function() use($scheduleForDays) {
-            echo json_encode(['scheduleForDays' => $scheduleForDays]);
+            echo json_encode(['scheduleForDays' => json_encode($scheduleForDays)]);
         });
         return $response;
     }
@@ -52,7 +55,7 @@ class ScheduleController extends AbstractController
     public function addSchedule(
         Request $request,
         GetScheduleService $scheduleService,
-        AddScheduleService $addScheduleService
+        ScheduleRepository $scheduleRepository
         ): Response {
         $postData = json_decode($request->getContent());
         $date = date('Y-m-d H:i:s', strtotime($postData->date));
@@ -60,7 +63,7 @@ class ScheduleController extends AbstractController
         $schedule = $scheduleService->execute($postData->companyId, $postData->description, $date);
         $content = json_encode(['failure'=>$schedule]);
         if (empty($schedule->getId)) {
-            $addScheduleService->execute($schedule);
+            $scheduleRepository->persist($schedule);
             $content = json_encode(['success'=>$schedule]);
         }
         $response = new Response();
@@ -68,4 +71,24 @@ class ScheduleController extends AbstractController
 
         return $response;
     }
+
+    /**
+     * @Route ("schedule/getCompaniesAvailability", name="schedule/getCompaniesAvailability")
+     */
+    public function getCompaniesAvailability(
+        Request $request,
+        GetAvailableCompaniesService $getAvailableCompaniesService
+    ) : Response {
+
+        $postData = json_decode($request->getContent());
+        //$date = date('Y-m-d H:i:s', strtotime($postData->date));
+        $date = new \DateTimeImmutable("2022-08-02 08:15:00");
+        $availableCompanies = $getAvailableCompaniesService->execute($date);
+        $jsonCompanies = [];
+        foreach ($availableCompanies as $company) {
+            $jsonCompanies[] = $company->jsonSerialize();
+        }
+        return new JsonResponse(json_encode(['availableCompanies' => $jsonCompanies]));
+    }
+
 }

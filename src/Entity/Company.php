@@ -23,16 +23,28 @@ class Company implements \JsonSerializable
      */
     private $CompanyName;
 
+    public function __construct(?string $companyName, ?int $id)
+    {
+        $this->id = $id;
+        $this->CompanyName = $companyName;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): Company
+    {
+        $this->id = $id;
+        return $this;
     }
     public function getCompanyName(): ?string
     {
         return $this->CompanyName;
     }
 
-    public function setCompanyName(string $CompanyName): self
+    public function setCompanyName(string $CompanyName): Company
     {
         $this->CompanyName = $CompanyName;
 

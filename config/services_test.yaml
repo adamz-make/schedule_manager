@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        public: true
+
+    test.App\application\Services\ScheduleList\GetAvailableCompaniesService: '@App\application\Services\ScheduleList\GetAvailableCompaniesService'
+
+

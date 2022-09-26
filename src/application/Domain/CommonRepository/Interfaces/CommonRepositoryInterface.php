@@ -2,7 +2,9 @@
 
 namespace App\application\Domain\CommonRepository\Interfaces;
 
-interface CommonRepositoryInterface
-{
+use Doctrine\ORM\EntityManagerInterface;
 
+Interface CommonRepositoryInterface
+{
+    public function getEm(): EntityManagerInterface;
 }

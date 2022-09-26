@@ -46,22 +46,21 @@ class GetScheduleLIstService
                 }
             });
             $JsonScheduleForDay = $this->scheduleToJson($scheduleForDay);
-
             $daysArray[$i] = $JsonScheduleForDay;
         }
         return $daysArray;
     }
 
+
     /**
-     * @param array<Schedule> $scheduleList
+     * @param array<schedule> $scheduleList
      * @return array
      */
-    private function scheduleToJson(array $scheduleList): array
+    private function scheduleToJson(array $scheduleList): ?array
     {
-        $outArr = [];
-        foreach ($scheduleList as $schedule) {
-            $outArr[] = $schedule->jsonSerialize();
+        if (reset($scheduleList) instanceOf Schedule) {
+            return reset($scheduleList)->jsonSerialize();
         }
-        return $outArr;
+        return [];
     }
 }

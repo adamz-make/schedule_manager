@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\application\Domain\Model\Company\Interfaces\CompanyRepositoryInterface;
 use App\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,29 +22,9 @@ class CompanyRepository extends ServiceEntityRepository implements CompanyReposi
         parent::__construct($registry, Company::class);
     }
 
-    // /**
-    //  * @return Company[] Returns an array of Company objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getEm(): EntityManagerInterface
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-    /**
-     * @param string $companyName
-     * @return Company|null
-     */
-    public function getByCompanyName(string $companyName): ?Company
-    {
-        return $this->findBy([$companyName]);
+        return $this->_em;
     }
 
     public function findOneBySomeField($value): ?Company

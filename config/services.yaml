@@ -30,15 +30,14 @@ services:
     src\application\Services\SecurityServices\AddCompanyService:
         arguments: [ doctrine.orm.entity_manager ]
         #scheduleServices
-    src\application\Services\ScheduleList\GetScheduleService:
-        arguments: [
-                src\Repository\ScheduleRepository,
-                src\Repository\CompanyRepository
-        ]
+   # src\application\Services\ScheduleList\GetScheduleService:
+   #     arguments: [
+   #             src\Repository\ScheduleRepository,
+   #             src\Repository\CompanyRepository
+   #     ]
         #companyServices
     src\application\Services\CompanyServices\GetCompaniesJsonService:
         arguments: [ src\Repository\CompanyRepository ]
-/c
 
     src\Repository\UserRepository:
         arguments: [ doctrine.orm.entity_manager ]

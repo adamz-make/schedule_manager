@@ -7,7 +7,9 @@ use App\application\Services\SecurityServices\LoginService;
 use App\application\Services\SecurityServices\Exceptions\NoUserException;
 use App\application\Services\SecurityServices\Exceptions\WrongPasswordOrLoginException;
 use App\Application\Services\Utils\ValidationHandler;
+use App\Entity\User;
 use App\Infrastructure\Model\UserRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use http\Params;
@@ -64,6 +66,11 @@ class SecurityController extends AbstractController
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
+        // haslo do zalogowania
+       // $user = new User();
+       // $user->setLogin('Adam');
+       // $user->setPassword('lol');
+      //  dd($passIn->hashPassword($user, $user->getPassword()));
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

@@ -1,29 +1,40 @@
 <template>
 <div>
-    <div class="schedule">
+    <div v-on:click="setShowScheduleDescription"
+        class="schedule" v-bind:class="{'no_data': data.id === null || data.id === undefined }">
         <div class ="text_date">
             {{date}}
-            {{data}}
+            {{showDescription}}
         </div>
     </div>
 </div>
 </template>
 
 <script>
+import ScheduleDescription from "./scheduleDescription";
+import {eventBus} from "../schedule";
 export default {
     name: "singleSchedule",
+    components: {ScheduleDescription},
+    data() {
+        return {
+            hasData: false,
+            showDescription: false,
+        }
+    },
     props: {
         date: String,
         data: null,
         seq: Number,
+        openNewDescription: true,
     },
-    data() {
-        return {
-        }
-    },
-    created() {
-        console.log('singleSchedule');
-        console.log(this.data);
+    methods: {
+        setShowScheduleDescription() {
+            this.showDescription = !this.showDescription;
+            if (this.showDescription) {
+                eventBus.$emit('descriptionData', this.data)
+            }
+        },
     }
 }
 </script>
@@ -52,5 +63,8 @@ export default {
 .text_date{
     text-align: center;
     padding-top: 30px;
+}
+.no_data {
+    background-color: red;
 }
 </style>

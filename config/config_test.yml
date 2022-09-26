@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    public: true
+
+    test.App\application\Services\ScheduleList\GetAvailableCompaniesService: '@App\application\Services\ScheduleList\GetAvailableCompaniesService'
+
+framework:
+  test: ~
+  session:
+    storage_id: session.storage.mock_file
+  profiler:
+    collect: false
+web_profiler:
+  toolbar: false
+  intercept_redirects: false
+swiftmailer:
+  disable_delivery: true
